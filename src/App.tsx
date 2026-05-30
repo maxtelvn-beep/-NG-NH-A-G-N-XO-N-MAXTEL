@@ -343,14 +343,14 @@ export default function App() {
                   <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current pt-0.5" /> 4.9/5 Excellent Quality
                 </div>
                 {/* Product Image */}
-                <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-[4/3] sm:aspect-auto sm:h-[450px] relative flex md:flex-col items-center justify-center border border-brand-500/40 p-4">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-[4/3] sm:aspect-auto sm:h-[450px] relative flex md:flex-col items-center justify-center border border-brand-500/40">
                   <img 
-                    src="https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-e1720235948332.png" 
+                    src="https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png" 
                     fetchPriority="high" 
                     loading="eager" 
                     alt="Banner Ống Nhựa Gân Xoắn HDPE Maxtel" 
-                    className="absolute inset-0 w-full h-full object-contain cursor-pointer transition-transform duration-700 hover:scale-105 p-6" 
-                    onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-e1720235948332.png")}
+                    className="absolute inset-0 w-full h-full object-cover cursor-pointer transition-transform duration-700 hover:scale-105" 
+                    onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png")}
                   />
                   
                   {/* Overlay for zoom hint */}
@@ -539,19 +539,19 @@ export default function App() {
                        title: "Nhựa HDPE Nguyên Sinh",
                        desc: "Nhựa HDPE nguyên sinh kháng hóa chất và kiềm. Độ bền bỉ vĩnh cửu theo thời gian.",
                        icon: Shield,
-                       image: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-e1720235948332.png"
+                       image: "https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-XOAN-HDPE.png"
                      },
                      {
                        title: "Cấu Trúc Gân Xoắn Linh Hoạt",
-                       desc: "Thiết kế lượn sóng đa hướng, chống xẹp ống khi chịu tải trọng đất lớn hoặc bị xe cộ chèn ngang.",
-                       icon: ShieldCheck,
-                       image: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-e1720235948332.png"
+                        desc: "Thiết kế lượn sóng đa hướng, chống xẹp ống khi chịu tải trọng đất lớn hoặc bị xe cộ chèn ngang.",
+                        icon: ShieldCheck,
+                        image: "https://maxtel.vn/wp-content/uploads/2026/05/cau-truc-gan-xoan-linh-hoat.png"
                      },
                      {
                        title: "Thao Tác Dễ Luồn Cáp",
                        desc: "Dễ dàng kéo, xỏ, bảo trì cáp ngầm với hệ thống phụ kiện đa dạng tiêu chuẩn theo thông tư EVN.",
                        icon: Zap,
-                       image: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-e1720235948332.png"
+                       image: "https://maxtel.vn/wp-content/uploads/2026/05/thao-tac-de-luon-cap.png"
                      }
                    ].map((content, idx) => (
                      activeFeature === idx && (
