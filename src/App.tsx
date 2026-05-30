@@ -322,6 +322,28 @@ export default function App() {
                 </a>
               </div>
               
+              {/* Mobile Image (Placed under buttons) */}
+              <div className="block lg:hidden mt-8 w-full">
+                <div className="rounded-3xl p-1.5 sm:p-2 bg-gradient-to-tr from-brand-100 to-white shadow-2xl relative">
+                  <div className="absolute top-4 right-4 bg-[#0f172a] px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-bold text-accent-600 text-xs sm:text-sm shadow-sm z-20 flex items-center gap-1">
+                    <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current pt-0.5" /> 4.9/5 Excellent Quality
+                  </div>
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-[4/3] sm:aspect-auto sm:h-[350px] relative flex md:flex-col items-center justify-center border border-brand-500/40">
+                    <img 
+                      src="https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png" 
+                      fetchPriority="high" 
+                      loading="eager" 
+                      alt="Banner Ống Nhựa Gân Xoắn HDPE Maxtel" 
+                      className="absolute inset-0 w-full h-full object-cover cursor-pointer transition-transform duration-700 hover:scale-105" 
+                      onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png")}
+                    />
+                    <div className="absolute inset-0 bg-brand-900/40 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center justify-center">
+                      <span className="text-white font-medium text-sm border border-white/30 px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm">Phóng to ảnh mẫu</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
               <div className="mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 text-sm text-brand-50">
                 <div className="flex -space-x-2">
                   {[1,2,3,4].map(i => (
@@ -336,7 +358,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative lg:ml-10"
+              className="relative lg:ml-10 hidden lg:block"
             >
               <div className="rounded-3xl p-1.5 sm:p-2 bg-gradient-to-tr from-brand-100 to-white shadow-2xl relative">
                 <div className="absolute top-4 right-4 bg-[#0f172a]  px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-bold text-accent-600 text-xs sm:text-sm shadow-sm z-20 flex items-center gap-1">
@@ -396,7 +418,7 @@ export default function App() {
             ))}
           </div>
 
-          <motion.div layout className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-4 snap-x snap-mandatory gap-4 md:gap-6 px-4 md:px-0 pb-8 -mx-4 md:mx-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <motion.div layout className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 pb-8">
             <AnimatePresence>
               {filteredProducts.map((prod) => (
                 <motion.div 
@@ -406,7 +428,7 @@ export default function App() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3 }}
-                  className="glass-panel rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(37,166,223,0.15)] border border-brand-500/30 flex flex-col group cursor-pointer flex-none w-[80vw] sm:w-[340px] md:w-auto md:flex-1 snap-center"
+                  className="glass-panel rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(37,166,223,0.15)] border border-brand-500/30 flex flex-col group cursor-pointer"
                   onClick={scrollToContact}
                 >
                   <div className="aspect-square relative overflow-hidden bg-white rounded-t-2xl flex items-center justify-center">
@@ -415,14 +437,14 @@ export default function App() {
                        <span className="bg-[#0f172a]/90 text-white text-xs font-bold px-2 py-1.5 rounded-lg border border-brand-500 shadow-sm">{prod.cap}</span>
                     </div>
                   </div>
-                  <div className="p-5 flex-1 flex flex-col border-t border-brand-500/10">
-                    <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-brand-500 transition-colors uppercase leading-snug">{prod.title}</h3>
-                    <p className="text-sm text-slate-300 line-clamp-2 mb-4 leading-relaxed">{prod.desc}</p>
+                  <div className="p-3 sm:p-5 flex-1 flex flex-col border-t border-brand-500/10">
+                    <h3 className="text-sm sm:text-lg font-bold text-white mb-1 sm:mb-2 line-clamp-2 group-hover:text-brand-500 transition-colors uppercase leading-snug">{prod.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-300 line-clamp-2 mb-2 sm:mb-4 leading-relaxed">{prod.desc}</p>
                     
                     {/* Tags removed as requested */}
 
                     <div className="flex items-center justify-center pt-2 gap-2 border-t border-brand-500/20">
-                      <button className="w-full text-brand-400 bg-brand-900/40 border border-brand-500/30 group-hover:bg-brand-600 group-hover:text-white group-hover:border-transparent px-3 py-2.5 text-sm font-bold rounded-lg transition-colors shadow-sm whitespace-nowrap">
+                      <button className="w-full text-brand-400 bg-brand-900/40 border border-brand-500/30 group-hover:bg-brand-600 group-hover:text-white group-hover:border-transparent px-2 sm:px-3 py-2 text-[10px] sm:text-sm font-bold rounded-lg transition-colors shadow-sm whitespace-nowrap">
                         TẢI BÁO GIÁ ĐẠI LÝ
                       </button>
                     </div>
