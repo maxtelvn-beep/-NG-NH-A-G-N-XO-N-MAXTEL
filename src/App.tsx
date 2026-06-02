@@ -437,13 +437,17 @@ export default function App() {
                        <span className="bg-[#0f172a]/90 text-white text-xs font-bold px-2 py-1.5 rounded-lg border border-brand-500 shadow-sm">{prod.cap}</span>
                     </div>
                   </div>
-                  <div className="p-3 sm:p-5 flex-1 flex flex-col border-t border-brand-500/10">
-                    <h3 className="text-sm sm:text-lg font-bold text-white mb-1 sm:mb-2 line-clamp-2 group-hover:text-brand-500 transition-colors uppercase leading-snug">{prod.title}</h3>
-                    <p className="text-xs sm:text-sm text-slate-300 line-clamp-2 mb-2 sm:mb-4 leading-relaxed">{prod.desc}</p>
+                  <div className="p-2 sm:p-5 flex-1 flex flex-col border-t border-brand-500/10 justify-between">
+                    <div>
+                      <h3 className="text-[11px] sm:text-lg font-bold text-white mb-1 sm:mb-2 line-clamp-3 sm:line-clamp-2 group-hover:text-brand-500 transition-colors uppercase leading-snug">{prod.title}</h3>
+                      <div className="hidden sm:block">
+                        <p className="text-sm text-slate-300 line-clamp-2 mb-4 leading-relaxed">{prod.desc}</p>
+                      </div>
+                    </div>
                     
                     {/* Tags removed as requested */}
 
-                    <div className="flex items-center justify-center pt-2 gap-2 border-t border-brand-500/20">
+                    <div className="flex items-center justify-center pt-2 gap-2 border-t border-brand-500/20 mt-auto">
                       <button className="w-full text-brand-400 bg-brand-900/40 border border-brand-500/30 group-hover:bg-brand-600 group-hover:text-white group-hover:border-transparent px-2 sm:px-3 py-2 text-[10px] sm:text-sm font-bold rounded-lg transition-colors shadow-sm whitespace-nowrap">
                         TẢI BÁO GIÁ ĐẠI LÝ
                       </button>
