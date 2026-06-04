@@ -1084,20 +1084,53 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Floating Zalo Button */}
-      <a 
-        href="https://zalo.me/0973497685" 
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-[60] w-12 h-12 sm:w-16 sm:h-16 bg-[#0068FF] rounded-full shadow-[0_0_20px_rgba(0,104,255,0.4)] hover:scale-110 hover:shadow-[0_0_25px_rgba(0,104,255,0.6)] transition-all flex items-center justify-center isolate border-2 border-white"
-        aria-label="Liên hệ trực tiếp qua hộp chat Zalo"
-      >
-        <span className="font-extrabold text-white text-sm sm:text-lg mb-[1px] tracking-tight" style={{ fontFamily: 'sans-serif' }}>Zalo</span>
-        <span className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-4 w-4 sm:h-5 sm:w-5 bg-red-500 border-2 border-white"></span>
-        </span>
-      </a>
+      {/* Floating Zalo Button with Contacts Popover */}
+      <div className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-[60] flex flex-col items-end group">
+        
+        {/* Contact List Popover */}
+        <div className="bg-white rounded-2xl shadow-xl border border-brand-500/20 mb-4 w-[320px] sm:w-[380px] p-4 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 origin-bottom-right">
+          <div className="text-sm font-semibold text-slate-800 mb-3 pb-2 border-b border-slate-100">
+            Chat Zalo hoặc gọi Hotline - Hỗ trợ 24/7
+          </div>
+          <div className="flex flex-col gap-2">
+             {[
+                { name: "Ms. Dung", phone: "0982 960 685" },
+                { name: "Mr. Sơn", phone: "0973 497 685" },
+                { name: "Ms. Hồng", phone: "096 191 9559" },
+                { name: "Mr. Đức Sơn", phone: "096 165 3553" },
+                { name: "Ms. Lan", phone: "098 939 5445" }
+             ].map((contact, i) => (
+                <a 
+                  key={i}
+                  href={`https://zalo.me/${contact.phone.replace(/\s+/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors"
+                >
+                  <div className="w-8 h-8 rounded-full bg-[#0068FF] flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                    Z
+                  </div>
+                  <div className="flex-1">
+                    <span className="text-[#0068FF] font-semibold text-sm">Zalo {contact.name}</span>
+                    <span className="text-accent-600 font-bold text-sm ml-1">- {contact.phone}</span>
+                  </div>
+                </a>
+             ))}
+          </div>
+        </div>
+
+        {/* Zalo Button Trigger */}
+        <div 
+          className="w-12 h-12 sm:w-16 sm:h-16 bg-[#0068FF] rounded-full shadow-[0_0_20px_rgba(0,104,255,0.4)] hover:scale-110 hover:shadow-[0_0_25px_rgba(0,104,255,0.6)] cursor-pointer transition-all duration-300 flex items-center justify-center border-2 border-white relative animate-bounce hover:animate-none"
+          aria-label="Liên hệ trực tiếp qua hộp chat Zalo"
+        >
+          <span className="font-extrabold text-white text-sm sm:text-lg mb-[1px] tracking-tight" style={{ fontFamily: 'sans-serif' }}>Zalo</span>
+          <span className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 sm:h-5 sm:w-5 bg-red-500 border-2 border-white"></span>
+          </span>
+        </div>
+      </div>
 
       {/* Floating CTA for Mobile */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-[#0f172a] border-t border-brand-500/40 z-50 sm:hidden flex gap-3 shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
