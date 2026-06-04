@@ -331,12 +331,12 @@ export default function App() {
                   </div>
                   <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-square sm:aspect-auto sm:h-[350px] relative flex md:flex-col items-center justify-center border border-brand-500/40">
                     <img 
-                      src="https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png" 
+                      src="https://maxtel.vn/wp-content/uploads/2026/06/banner-ong-nhua-gan-xoan-hdpe.png" 
                       fetchPriority="high" 
                       loading="eager" 
                       alt="Banner Ống Nhựa Gân Xoắn HDPE Maxtel" 
                       className="absolute inset-0 w-full h-full object-cover cursor-pointer transition-transform duration-700 hover:scale-105" 
-                      onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png")}
+                      onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2026/06/banner-ong-nhua-gan-xoan-hdpe.png")}
                     />
                     <div className="absolute inset-0 bg-brand-900/40 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center justify-center">
                       <span className="text-white font-medium text-sm border border-white/30 px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm">Phóng to ảnh mẫu</span>
@@ -383,12 +383,12 @@ export default function App() {
                 {/* Product Image */}
                 <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-[4/3] sm:aspect-auto sm:h-[450px] relative flex md:flex-col items-center justify-center border border-brand-500/40">
                   <img 
-                    src="https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png" 
+                    src="https://maxtel.vn/wp-content/uploads/2026/06/banner-ong-nhua-gan-xoan-hdpe.png" 
                     fetchPriority="high" 
                     loading="eager" 
                     alt="Banner Ống Nhựa Gân Xoắn HDPE Maxtel" 
                     className="absolute inset-0 w-full h-full object-cover cursor-pointer transition-transform duration-700 hover:scale-105" 
-                    onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png")}
+                    onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2026/06/banner-ong-nhua-gan-xoan-hdpe.png")}
                   />
                   
                   {/* Overlay for zoom hint */}
