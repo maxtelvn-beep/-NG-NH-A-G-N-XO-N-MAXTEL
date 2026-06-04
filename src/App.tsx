@@ -13,7 +13,8 @@ export default function App() {
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('hdpe-lon');
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
   const [activeSpecFilter, setActiveSpecFilter] = useState('hdpe-lon');
   const [activeFeature, setActiveFeature] = useState(0);
 
@@ -69,6 +70,13 @@ export default function App() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveFeature((prev) => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(timer);
   }, []);
 
     const products = [
@@ -207,7 +215,15 @@ export default function App() {
     }
   ];
 
-  const filteredProducts = products.filter(p => p.category === activeFilter);
+  const filteredProducts = activeFilter === 'all' ? products : products.filter(p => p.category === activeFilter);
+  const ITEMS_PER_PAGE = 8;
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const currentProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+  const handleFilterChange = (filterId: string) => {
+    setActiveFilter(filterId);
+    setCurrentPage(1);
+  };
 
   const scrollToContact = () => {
     document.getElementById('contact-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -294,8 +310,8 @@ export default function App() {
               transition={{ duration: 0.6 }}
               className="text-center lg:text-left bg-[#020617]/60 backdrop-blur-md p-6 sm:p-8 lg:p-10 rounded-[2rem] border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.3)]"
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-900/40 border border-brand-100 text-brand-500 font-medium text-sm mb-6">
-                <span className="flex h-2 w-2 rounded-full bg-accent-500 animate-glow-red"></span>
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-brand-900/40 border border-brand-100 text-brand-500 font-medium text-[10px] sm:text-sm mb-6">
+                <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-accent-500 animate-glow-red"></span>
                 Ống Nhựa Gân Xoắn Tiêu Chuẩn Cao Cấp
               </div>
               <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-[1.75rem] xl:text-4xl 2xl:text-5xl font-extrabold tracking-tight text-white leading-tight sm:leading-tight mb-4 lg:mb-6 uppercase">
@@ -306,6 +322,28 @@ export default function App() {
               <p className="text-base sm:text-lg text-white [text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)] mb-6 lg:mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed px-2 lg:px-0">
                 Lựa chọn ống nhựa gân xoắn HDPE số 1 của các công trình viễn thông, mạng nội bộ và Data Center. Lõi cáp nguyên chất, đầu bấm đúc sẵn độ suy hao siêu thấp, tín hiệu truyền tải tốc độ cao và bền bỉ theo thời gian.
               </p>
+              
+              {/* Mobile Image (Placed under text) */}
+              <div className="block lg:hidden mb-8 w-full max-w-[260px] sm:max-w-md mx-auto">
+                <div className="rounded-3xl p-1.5 sm:p-2 bg-gradient-to-tr from-brand-100 to-white shadow-2xl relative">
+                  <div className="absolute top-4 right-4 bg-[#0f172a] px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-bold text-accent-600 text-xs sm:text-sm shadow-sm z-20 flex items-center gap-1">
+                    <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current pt-0.5" /> 4.9/5 Excellent Quality
+                  </div>
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-square sm:aspect-auto sm:h-[350px] relative flex md:flex-col items-center justify-center border border-brand-500/40">
+                    <img 
+                      src="https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png" 
+                      fetchPriority="high" 
+                      loading="eager" 
+                      alt="Banner Ống Nhựa Gân Xoắn HDPE Maxtel" 
+                      className="absolute inset-0 w-full h-full object-cover cursor-pointer transition-transform duration-700 hover:scale-105" 
+                      onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png")}
+                    />
+                    <div className="absolute inset-0 bg-brand-900/40 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center justify-center">
+                      <span className="text-white font-medium text-sm border border-white/30 px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm">Phóng to ảnh mẫu</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
               
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 px-4 sm:px-0">
                 <button 
@@ -320,28 +358,6 @@ export default function App() {
                 >
                   Xem Bảng Giá / SP
                 </a>
-              </div>
-              
-              {/* Mobile Image (Placed under buttons) */}
-              <div className="block lg:hidden mt-8 w-full">
-                <div className="rounded-3xl p-1.5 sm:p-2 bg-gradient-to-tr from-brand-100 to-white shadow-2xl relative">
-                  <div className="absolute top-4 right-4 bg-[#0f172a] px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-bold text-accent-600 text-xs sm:text-sm shadow-sm z-20 flex items-center gap-1">
-                    <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current pt-0.5" /> 4.9/5 Excellent Quality
-                  </div>
-                  <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-[4/3] sm:aspect-auto sm:h-[350px] relative flex md:flex-col items-center justify-center border border-brand-500/40">
-                    <img 
-                      src="https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png" 
-                      fetchPriority="high" 
-                      loading="eager" 
-                      alt="Banner Ống Nhựa Gân Xoắn HDPE Maxtel" 
-                      className="absolute inset-0 w-full h-full object-cover cursor-pointer transition-transform duration-700 hover:scale-105" 
-                      onClick={() => setSelectedImage("https://maxtel.vn/wp-content/uploads/2026/05/ONG-NHUA-GAN-XOAN.png")}
-                    />
-                    <div className="absolute inset-0 bg-brand-900/40 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-center justify-center">
-                      <span className="text-white font-medium text-sm border border-white/30 px-4 py-2 rounded-full bg-black/50 backdrop-blur-sm">Phóng to ảnh mẫu</span>
-                    </div>
-                  </div>
-                </div>
               </div>
               
               <div className="mt-8 lg:mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 text-sm text-brand-50">
@@ -397,8 +413,9 @@ export default function App() {
             <p className="mt-4 text-lg text-white [text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)]">Cung cấp đầy đủ chủng loại ống nhựa gân xoắn HDPE nội bộ, ngoài trời, singlemode và multimode với đầu nối tuỳ chọn theo dự án.</p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
+          <div className="flex overflow-x-auto sm:flex-wrap sm:justify-center gap-2 sm:gap-3 mb-8 sm:mb-12 pb-2 sm:pb-0">
             {[
+              { id: 'all', name: 'Tất Cả Sản Phẩm' },
               { id: 'hdpe-lon', name: 'Đường Kính Lớn (Phi 100-200)' },
               { id: 'hdpe-vua', name: 'Đường Kính Vừa (Phi 50-80)' },
               { id: 'hdpe-nho', name: 'Đường Kính Nhỏ (Phi 25-40)' },
@@ -406,8 +423,8 @@ export default function App() {
             ].map(filter => (
               <button
                 key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
-                className={`px-5 py-3 sm:py-2.5 rounded-full text-sm font-semibold transition-all min-h-[44px] ${
+                onClick={() => handleFilterChange(filter.id)}
+                className={`flex-shrink-0 whitespace-nowrap px-5 py-3 sm:py-2.5 rounded-full text-sm font-semibold transition-all min-h-[44px] ${
                   activeFilter === filter.id 
                     ? 'bg-brand-600 text-white shadow-[0_0_10px_rgba(37,166,223,0.2)] shadow-brand-500/20 scale-105' 
                     : 'bg-[#0f172a] text-white [text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)] hover:bg-slate-800 border border-brand-500/30'
@@ -418,9 +435,9 @@ export default function App() {
             ))}
           </div>
 
-          <motion.div layout className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 pb-8">
+          <motion.div layout className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 pb-8">
             <AnimatePresence>
-              {filteredProducts.map((prod) => (
+              {currentProducts.map((prod) => (
                 <motion.div 
                   key={prod.id}
                   layout
@@ -431,24 +448,18 @@ export default function App() {
                   className="glass-panel rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(37,166,223,0.15)] border border-brand-500/30 flex flex-col group cursor-pointer"
                   onClick={scrollToContact}
                 >
-                  <div className="aspect-square relative overflow-hidden bg-white rounded-t-2xl flex items-center justify-center">
-                    <img src={prod.img} loading="lazy" decoding="async" alt={prod.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <div className="aspect-square relative overflow-hidden bg-white rounded-t-2xl p-4 flex items-center justify-center">
+                    <img src={prod.img} loading="lazy" decoding="async" alt={prod.title} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700 p-2" />
                     <div className="absolute bottom-3 left-3 flex gap-2">
                        <span className="bg-[#0f172a]/90 text-white text-xs font-bold px-2 py-1.5 rounded-lg border border-brand-500 shadow-sm">{prod.cap}</span>
                     </div>
                   </div>
-                  <div className="p-2 sm:p-5 flex-1 flex flex-col border-t border-brand-500/10 justify-between">
-                    <div>
-                      <h3 className="text-[11px] sm:text-lg font-bold text-white mb-1 sm:mb-2 line-clamp-3 sm:line-clamp-2 group-hover:text-brand-500 transition-colors uppercase leading-snug">{prod.title}</h3>
-                      <div className="hidden sm:block">
-                        <p className="text-sm text-slate-300 line-clamp-2 mb-4 leading-relaxed">{prod.desc}</p>
-                      </div>
-                    </div>
+                  <div className="p-3 sm:p-5 flex-1 flex flex-col border-t border-brand-500/10">
+                    <h3 className="text-xs sm:text-lg font-bold text-white mb-1.5 sm:mb-2 line-clamp-3 sm:line-clamp-2 group-hover:text-brand-500 transition-colors uppercase leading-snug">{prod.title}</h3>
+                    <p className="hidden sm:block text-sm text-slate-300 line-clamp-2 mb-4 leading-relaxed">{prod.desc}</p>
                     
-                    {/* Tags removed as requested */}
-
-                    <div className="flex items-center justify-center pt-2 gap-2 border-t border-brand-500/20 mt-auto">
-                      <button className="w-full text-brand-400 bg-brand-900/40 border border-brand-500/30 group-hover:bg-brand-600 group-hover:text-white group-hover:border-transparent px-2 sm:px-3 py-2 text-[10px] sm:text-sm font-bold rounded-lg transition-colors shadow-sm whitespace-nowrap">
+                    <div className="flex items-center justify-center pt-3 sm:pt-4 gap-2 border-t border-brand-500/20 mt-auto">
+                      <button className="w-full text-brand-400 bg-brand-900/40 border border-brand-500/30 group-hover:bg-brand-600 group-hover:text-white group-hover:border-transparent px-2 sm:px-3 py-2 sm:py-2.5 text-[10px] sm:text-sm font-bold rounded-lg transition-colors shadow-sm whitespace-nowrap">
                         TẢI BÁO GIÁ ĐẠI LÝ
                       </button>
                     </div>
@@ -457,6 +468,24 @@ export default function App() {
               ))}
             </AnimatePresence>
           </motion.div>
+          
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-4">
+              {Array.from({ length: totalPages }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentPage(idx + 1)}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
+                    currentPage === idx + 1
+                      ? 'bg-brand-600 text-white shadow-[0_0_10px_rgba(37,166,223,0.3)]'
+                      : 'bg-[#0f172a] text-slate-300 hover:bg-slate-800 border border-brand-500/30'
+                  }`}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
+          )}
           
           <div className="text-center mt-12 sm:mt-16 pt-8 border-t border-brand-500/30">
             <button onClick={scrollToContact} className="w-full sm:w-auto bg-accent-600 hover:bg-accent-500 text-white shadow-[0_0_20px_rgba(195,28,36,0.6)] border border-accent-400/50 font-bold px-8 py-3.5 rounded-xl sm:rounded-full inline-flex items-center justify-center gap-2 text-base transition-colors">
@@ -514,7 +543,7 @@ export default function App() {
           <div className="flex flex-col md:flex-row gap-8 lg:gap-12 max-w-6xl mx-auto">
             {/* Sidebar / Tabs */}
             <div 
-              className="flex flex-row overflow-x-auto md:flex-col gap-2 sm:gap-3 md:w-64 lg:w-80 pb-4 md:pb-0 flex-shrink-0"
+              className="hidden md:flex flex-col gap-2 sm:gap-3 md:w-64 lg:w-80 pb-4 md:pb-0 flex-shrink-0"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {[
@@ -558,8 +587,8 @@ export default function App() {
             <div className="md:flex-1 w-full relative">
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[80%] max-h-[80%] bg-brand-600/10 blur-[40px] md:blur-[80px] pointer-events-none rounded-full"></div>
               
-               <div className="glass-panel relative rounded-2xl shadow-[0_0_30px_rgba(37,166,223,0.15)] overflow-hidden border border-brand-500/30 w-full z-10 bg-white group">
-                 <AnimatePresence mode="wait">
+               <div className="glass-panel relative rounded-2xl shadow-[0_0_30px_rgba(37,166,223,0.15)] overflow-hidden border border-brand-500/30 w-full aspect-[4/3] md:aspect-auto md:h-full z-10 bg-white group">
+                 <AnimatePresence>
                    {[
                      {
                        title: "Nhựa HDPE Nguyên Sinh",
@@ -583,15 +612,15 @@ export default function App() {
                      activeFeature === idx && (
                        <motion.div
                          key={idx}
-                         initial={{ opacity: 0, scale: 0.95 }}
-                         animate={{ opacity: 1, scale: 1 }}
-                         exit={{ opacity: 0, scale: 0.95 }}
-                         transition={{ duration: 0.3 }}
-                         className="cursor-pointer bg-white w-full h-full flex"
+                         initial={{ opacity: 0 }}
+                         animate={{ opacity: 1 }}
+                         exit={{ opacity: 0 }}
+                         transition={{ duration: 0.8, ease: "easeInOut" }}
+                         className="cursor-pointer bg-white w-full h-full absolute inset-0 flex items-center justify-center"
                          onClick={() => setSelectedImage(content.image)}
                        >
                          {/* Image Background */}
-                         <img src={content.image} loading="lazy" decoding="async" alt={content.title} className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-[1.03]" />
+                         <img src={content.image} loading="lazy" decoding="async" alt={content.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]" />
                        </motion.div>
                      )
                    ))}
@@ -686,11 +715,11 @@ export default function App() {
                           transition={{ duration: 0.3 }}
                         >
                           {specificationsData[activeSpecFilter].map((spec, index) => (
-                            <div key={index} className="flex flex-col md:grid md:grid-cols-5 border-b last:border-b-0 border-brand-500/20 hover:bg-brand-900/20 transition-all duration-300 group">
-                              <div className="py-3 px-4 md:px-6 md:py-4 text-sm font-semibold text-brand-50 bg-black/20 md:border-r border-brand-500/20 col-span-2 group-hover:text-brand-400 transition-colors flex items-center">
+                            <div key={index} className="flex flex-col sm:grid sm:grid-cols-5 border-b last:border-b-0 border-brand-500/20 hover:bg-brand-900/20 transition-all duration-300 group">
+                              <div className="pt-3 pb-1 sm:py-4 px-4 sm:px-6 text-xs sm:text-sm font-semibold text-brand-400 sm:text-brand-50 bg-brand-900/10 sm:bg-black/20 sm:border-r border-brand-500/20 col-span-2 sm:group-hover:text-brand-400 transition-colors flex items-center uppercase sm:normal-case">
                                 {spec.param}
                               </div>
-                              <div className="py-3 px-4 md:px-6 md:py-4 text-sm text-slate-100 col-span-3 leading-relaxed flex items-center">
+                              <div className="pb-3 pt-1 sm:py-4 px-4 sm:px-6 text-sm text-white sm:text-slate-100 col-span-3 leading-relaxed flex items-center font-medium sm:font-normal">
                                 {spec.value}
                               </div>
                             </div>
@@ -717,7 +746,7 @@ export default function App() {
            </div>
 
            {/* Mobile Layout */}
-           <div className="md:hidden space-y-4 pb-4">
+           <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 pb-6 hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
              {[
                 { 
                   feature: "Chất liệu nhựa bảo vệ", 
@@ -745,7 +774,7 @@ export default function App() {
                   maxtel: "Có đầy đủ bản test theo TCVN 7997:2009, CO/CQ, bảng cam kết tiêu chuẩn chất lượng ISO 9001 chính hãng Maxtel." 
                 }
               ].map((row, index) => (
-              <div key={index} className="bg-[#0f172a] rounded-2xl border border-brand-500/20 overflow-hidden shadow-lg relative pb-1">
+              <div key={index} className="flex-shrink-0 w-[85vw] snap-center bg-[#0f172a] rounded-2xl border border-brand-500/20 overflow-hidden shadow-lg relative pb-1">
                 <div className="absolute top-0 w-full h-[2px] bg-gradient-to-r from-brand-500/50 to-accent-500/50 left-0"></div>
                 <div className="bg-slate-800/80 p-3 border-b border-brand-500/30 text-center">
                   <h3 className="text-base font-bold text-white">{row.feature}</h3>
@@ -839,25 +868,25 @@ export default function App() {
       {/* Testimonials & Use Cases */}
       <section className="py-12 md:py-24 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[#0f172a] opacity-30 bg-cover bg-center sm:mix-blend-overlay"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 overflow-hidden">
           <div className="text-center mb-10 md:mb-16 max-w-3xl mx-auto">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-white">Sự Hài Lòng Từ Thực Tế Phòng IT</h2>
             <p className="text-white [text-shadow:_0_1px_2px_rgb(0_0_0_/_80%)] text-lg">Hàng triệu doanh nghiệp đã nâng cấp hạ tầng viễn thông bằng ống HDPE Maxtel.</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex animate-marquee hover:[animation-play-state:paused] gap-6 sm:gap-8 w-max">
             {[
               { 
                 name: "Anh Hoàng Quân", 
                 role: "IT Manager - VietBank", 
                 img: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-e1720235948332.png",
-                text: "Là ngân hàng nên chúng tôi đặc biệt yêu cầu khắt khe thiết bị phòng phòng Data Center. ống HDPE Maxtel đáp ứng hoàn toàn mọi tiêu chuẩn khắt khe về độ suy hao tiếp xúc, truyền dẫn tín hiệu tốc độ cao cực kỳ ổn định." 
+                text: "Là ngân hàng nên chúng tôi đặc biệt yêu cầu khắt khe thiết bị phòng phòng Data Center. Ống HDPE Maxtel đáp ứng hoàn toàn mọi tiêu chuẩn khắt khe về độ suy hao tiếp xúc, truyền dẫn tín hiệu tốc độ cao cực kỳ ổn định." 
               },
               { 
                 name: "Kỹ sư Huỳnh Sang", 
                 role: "Chỉ Huy Phục Vụ Dự Án BĐS", 
                 img: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-Singlemode-SCAPC-LCAPC-1.jpg",
-                text: "Tôi thi công hàng ngàn sợi ống nhựa gân xoắn HDPE và phụ kiện măng xông phân nhánh vào mạng lõi các tòa nhà The Pride. Mọi thứ từ bao bì đóng gói chống sốc cho đến chất lượng gia công đường ống của hãng Maxtel rất được chăm chút kỹ càng." 
+                text: "Tôi thi công hàng ngàn mét ống nhựa gân xoắn HDPE và phụ kiện măng xông phân nhánh vào mạng lõi các tòa nhà The Pride. Mọi thứ từ bao bì đóng gói chống sốc cho đến chất lượng gia công đường ống của hãng Maxtel rất được chăm chút kỹ càng." 
               },
               { 
                 name: "Chị Thu Hoa", 
@@ -865,8 +894,26 @@ export default function App() {
                 img: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-Singlemode-SCUPC-SCAPC-5.jpg",
                 text: "Cửa hàng tôi bây giờ chỉ phân phối ống nhựa gân xoắn HDPE hãng Maxtel vì cam kết bảo hành suy hao trọn đời, cung cấp đầy đủ giấy tờ CO, CQ cho dự án. Khách sỉ toàn mua số lượng lớn cực kỳ tin tưởng." 
               },
-            ].map((t, i) => (
-              <div key={i} className="bg-[#0f172a]/80 backdrop-blur-sm p-8 rounded-3xl border border-brand-500/20 flex flex-col shadow-[0_0_20px_rgba(37,166,223,0.1)] hover:border-brand-500/40 transition-colors">
+              { 
+                name: "Anh Trần Cường", 
+                role: "Chủ Đầu Tư - Khu Đô Thị", 
+                img: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-e1720235948332.png",
+                text: "Qua quá trình khảo sát nhiều đơn vị cung cấp ống HDPE, chúng tôi quyết định chọn Maxtel cho toàn bộ dự án 50 hecta này vì thông số kỹ thuật chịu nén rất tốt và đội ngũ hỗ trợ nhiệt tình, tiến độ giao hàng chuẩn xác." 
+              },
+              { 
+                name: "Kỹ sư Lê Tài", 
+                role: "Giám Sát Hạ Tầng Mạng", 
+                img: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-Singlemode-SCAPC-LCAPC-1.jpg",
+                text: "Ống nhựa Maxtel uốn cong rất linh hoạt, đặc biệt phần cuộn kéo dây cáp thi công tiết kiệm được đáng kể thời gian và nhân lực. Bề mặt nhẵn bóng bên trong nên khi kéo cáp giảm thiểu tối đa rủi ro đứt xước." 
+              },
+              { 
+                name: "Anh Phát Đạt", 
+                role: "Nhà Thầu Cơ Điện (M&E)", 
+                img: "https://maxtel.vn/wp-content/uploads/2024/06/ong-nhua-xoan-hdpe-maxtel-Singlemode-SCUPC-SCAPC-5.jpg",
+                text: "Đã và đang đồng hành cùng Maxtel nhiều năm, tôi hoàn toàn yên tâm về chất lượng ống cũng như phụ kiện đi kèm. Sự đồng bộ từ hãng giúp quá trình nghiệm thu dự án với chủ đầu tư diễn ra vô cùng suôn sẻ." 
+              }
+            ].map(t => [t, t]).flat().map((t, i) => (
+              <div key={i} className="flex-shrink-0 w-[85vw] sm:w-[400px] bg-[#0f172a]/80 backdrop-blur-sm p-8 rounded-3xl border border-brand-500/20 flex flex-col shadow-[0_0_20px_rgba(37,166,223,0.1)] hover:border-brand-500/40 transition-colors">
                 <div className="flex text-yellow-400 mb-6 gap-1">
                   {[1,2,3,4,5].map(s => <Star key={s} className="w-5 h-5 fill-current" />)}
                 </div>
@@ -886,24 +933,30 @@ export default function App() {
             ))}
           </div>
           
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              "https://maxtel.vn/wp-content/uploads/2026/05/anh1.png",
-              "https://maxtel.vn/wp-content/uploads/2026/05/anh2.png",
-              "https://maxtel.vn/wp-content/uploads/2026/05/anh3.png",
-              "https://maxtel.vn/wp-content/uploads/2026/05/anh4.png"
-            ].map((img, i) => (
-               <div 
-                 key={i} 
-                 className="h-32 sm:h-48 rounded-xl overflow-hidden relative group cursor-pointer border border-brand-500/20 p-2 bg-white"
-                 onClick={() => setSelectedImage(img)}
-               >
-                 <img src={img} loading="lazy" decoding="async" alt="Hình ảnh ống nhựa gân xoắn HDPE chụp tại kho thật" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
-                 <div className="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                   <span className="text-white font-medium text-sm border border-white/30 px-3 py-1 rounded-full bg-black/40 shadow-sm">Xem chi tiết Cáp</span>
+          <div className="mt-12 sm:mt-20 py-4 overflow-hidden border-y border-brand-500/20">
+            <div className="flex animate-marquee hover:[animation-play-state:paused] gap-4 w-max">
+              {[
+                "https://maxtel.vn/wp-content/uploads/2026/05/anh1.png",
+                "https://maxtel.vn/wp-content/uploads/2026/05/anh2.png",
+                "https://maxtel.vn/wp-content/uploads/2026/05/anh3.png",
+                "https://maxtel.vn/wp-content/uploads/2026/05/anh4.png",
+                "https://maxtel.vn/wp-content/uploads/2026/05/anh1.png",
+                "https://maxtel.vn/wp-content/uploads/2026/05/anh2.png",
+                "https://maxtel.vn/wp-content/uploads/2026/05/anh3.png",
+                "https://maxtel.vn/wp-content/uploads/2026/05/anh4.png"
+              ].map((img, i) => (
+                 <div 
+                   key={i} 
+                   className="flex-shrink-0 w-[60vw] sm:w-[40vw] md:w-[300px] h-32 sm:h-48 rounded-xl overflow-hidden relative group cursor-pointer border border-brand-500/20 p-2 bg-white"
+                   onClick={() => setSelectedImage(img)}
+                 >
+                   <img src={img} loading="lazy" decoding="async" alt="Hình ảnh ống nhựa gân xoắn HDPE chụp tại kho thật" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" />
+                   <div className="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                     <span className="text-white font-medium text-sm border border-white/30 px-3 py-1 rounded-full bg-black/40 shadow-sm">Xem chi tiết Cáp</span>
+                   </div>
                  </div>
-               </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -912,7 +965,7 @@ export default function App() {
       <section id="contact-section" className="py-12 md:py-24 relative">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-[#0f172a]  rounded-3xl shadow-[0_0_20px_rgba(37,166,223,0.4)] overflow-hidden flex flex-col md:flex-row relative">
-            <div className="md:w-5/12 bg-slate-800/80 backdrop-blur-md p-8 sm:p-10 text-white flex flex-col justify-between border-r border-slate-700/50">
+            <div className="hidden md:flex md:w-5/12 bg-slate-800/80 backdrop-blur-md p-8 sm:p-10 text-white flex-col justify-between border-r border-slate-700/50">
               <div>
                 <h3 className="text-xl sm:text-2xl font-bold mb-2 text-white">BÁO GIÁ ĐẠI LÝ LÊN TỚI 40%!</h3>
                 <p className="text-slate-300 text-xs sm:text-sm mb-6">Xin hãy để lại thông tin để chúng tôi liên hệ tư vấn dòng ống nhựa gân xoắn HDPE phù hợp và gởi bảng báo giá VIP cho doanh nghiệp.</p>
