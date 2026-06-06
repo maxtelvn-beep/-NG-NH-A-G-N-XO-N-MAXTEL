@@ -17,6 +17,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [activeSpecFilter, setActiveSpecFilter] = useState('hdpe-lon');
   const [activeFeature, setActiveFeature] = useState(0);
+  const [isZaloOpen, setIsZaloOpen] = useState(false);
 
     const specificationsData: Record<string, { param: string, value: string }[]> = {
     'hdpe-lon': [
@@ -326,9 +327,6 @@ export default function App() {
               {/* Mobile Image (Placed under text) */}
               <div className="block lg:hidden mb-8 w-full max-w-[260px] sm:max-w-md mx-auto">
                 <div className="rounded-3xl p-1.5 sm:p-2 bg-gradient-to-tr from-brand-100 to-white shadow-2xl relative">
-                  <div className="absolute top-4 right-4 bg-[#0f172a] px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-bold text-accent-600 text-xs sm:text-sm shadow-sm z-20 flex items-center gap-1">
-                    <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current pt-0.5" /> 4.9/5 Excellent Quality
-                  </div>
                   <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-square sm:aspect-auto sm:h-[350px] relative flex md:flex-col items-center justify-center border border-brand-500/40">
                     <img 
                       src="https://maxtel.vn/wp-content/uploads/2026/06/banner-ong-nhua-gan-xoan-hdpe.png" 
@@ -377,9 +375,6 @@ export default function App() {
               className="relative lg:ml-10 hidden lg:block"
             >
               <div className="rounded-3xl p-1.5 sm:p-2 bg-gradient-to-tr from-brand-100 to-white shadow-2xl relative">
-                <div className="absolute top-4 right-4 bg-[#0f172a]  px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-bold text-accent-600 text-xs sm:text-sm shadow-sm z-20 flex items-center gap-1">
-                  <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current pt-0.5" /> 4.9/5 Excellent Quality
-                </div>
                 {/* Product Image */}
                 <div className="bg-white rounded-2xl overflow-hidden shadow-inner aspect-[4/3] sm:aspect-auto sm:h-[450px] relative flex md:flex-col items-center justify-center border border-brand-500/40">
                   <img 
@@ -1085,12 +1080,15 @@ export default function App() {
       </footer>
 
       {/* Floating Zalo Button with Contacts Popover */}
-      <div className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-[60] flex flex-col items-end group">
+      <div className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-[60] flex flex-col items-end">
         
         {/* Contact List Popover */}
-        <div className="bg-white rounded-2xl shadow-xl border border-brand-500/20 mb-4 w-[320px] sm:w-[380px] p-4 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 origin-bottom-right">
-          <div className="text-sm font-semibold text-slate-800 mb-3 pb-2 border-b border-slate-100">
-            Chat Zalo hoặc gọi Hotline - Hỗ trợ 24/7
+        <div className={`bg-white rounded-2xl shadow-xl border border-brand-500/20 mb-4 w-[320px] sm:w-[380px] p-4 transition-all duration-300 origin-bottom-right ${isZaloOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible translate-y-4'}`}>
+          <div className="text-sm font-semibold text-slate-800 mb-3 pb-2 border-b border-slate-100 flex justify-between items-center">
+            <span>Chat Zalo hoặc gọi Hotline - Hỗ trợ 24/7</span>
+            <button onClick={() => setIsZaloOpen(false)} className="text-slate-400 hover:text-slate-600">
+              <X className="w-5 h-5" />
+            </button>
           </div>
           <div className="flex flex-col gap-2">
              {[
@@ -1121,14 +1119,17 @@ export default function App() {
 
         {/* Zalo Button Trigger */}
         <div 
-          className="w-12 h-12 sm:w-16 sm:h-16 bg-[#0068FF] rounded-full shadow-[0_0_20px_rgba(0,104,255,0.4)] hover:scale-110 hover:shadow-[0_0_25px_rgba(0,104,255,0.6)] cursor-pointer transition-all duration-300 flex items-center justify-center border-2 border-white relative animate-bounce hover:animate-none"
+          onClick={() => setIsZaloOpen(!isZaloOpen)}
+          className={`w-12 h-12 sm:w-16 sm:h-16 bg-[#0068FF] rounded-full shadow-[0_0_20px_rgba(0,104,255,0.4)] hover:scale-110 hover:shadow-[0_0_25px_rgba(0,104,255,0.6)] cursor-pointer transition-all duration-300 flex items-center justify-center border-2 border-white relative ${!isZaloOpen ? 'animate-bounce hover:animate-none' : ''}`}
           aria-label="Liên hệ trực tiếp qua hộp chat Zalo"
         >
           <span className="font-extrabold text-white text-sm sm:text-lg mb-[1px] tracking-tight" style={{ fontFamily: 'sans-serif' }}>Zalo</span>
-          <span className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 sm:h-5 sm:w-5 bg-red-500 border-2 border-white"></span>
-          </span>
+          {!isZaloOpen && (
+            <span className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 sm:h-5 sm:w-5 bg-red-500 border-2 border-white"></span>
+            </span>
+          )}
         </div>
       </div>
 
